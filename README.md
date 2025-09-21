@@ -11,9 +11,9 @@ Es soll in erster Linie eine Anlaufstelle für Menschen sein, die auf die gleich
 Alle Anleitungen und Artikel befinden sich in **Knowledgebase/Thema**.
 
 Bisher gibt es folgende Artikel:
-- [Installation Paperless-ngx als Podman-Service in uCoreOS](./blob/main/KnowledgeBase/Docker%20-%20Podman/uCoreOS-Paperless-ngx.md)
-- [Installation Portainer als Podman-Service in uCoreOS](./blob/main/KnowledgeBase/Docker%20-%20Podman/uCoreOS-Portainer.md)
-- [Installation Vaultwarden als Podman-Service in uCoreOS](./blob/main/KnowledgeBase/Docker%20-%20Podman/uCoreOS-Vaultwarden.md)
+- [Installation Paperless-ngx als Podman-Service in uCoreOS](./KnowledgeBase/Docker%20-%20Podman/uCoreOS-Paperless-ngx.md)
+- [Installation Portainer als Podman-Service in uCoreOS](./KnowledgeBase/Docker%20-%20Podman/uCoreOS-Portainer.md)
+- [Installation Vaultwarden als Podman-Service in uCoreOS](./KnowledgeBase/Docker%20-%20Podman/uCoreOS-Vaultwarden.md)
 
 ---
 

@@ -20,5 +20,5 @@ Bisher gibt es folgende Artikel:
 Viel Spaß
 
 PS:
-Falls ich Dir mit einer Information stundenlange Internet-Suchen erspart habe, würde ich mich über <a href="https://buymeacoffee.com/octank" target="_blank" title="Link zu buymeacoffee">einen Kaffee freuen</a> freuen.
+Falls ich Dir mit einer Information stundenlange Internet-Suchen erspart habe, würde ich mich über [einen Kaffee freuen](https://buymeacoffee.com/octank) freuen.
 

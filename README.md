@@ -13,6 +13,7 @@ Alle Anleitungen und Artikel befinden sich in **Knowledgebase/Thema**.
 Bisher gibt es folgende Artikel:
 - Installation Vaultwarden als Podman-Service in uCoreOS
 - Installation Paperless-ngx als Podman-Service in uCoreOS
+- Installation Portainer als Podman-Service in uCoreOS
 
 ---
 

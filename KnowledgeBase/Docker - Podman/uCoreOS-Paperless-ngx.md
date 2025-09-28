@@ -209,11 +209,12 @@ After=network-online.target paperless-tika.service
 Image=docker.io/paperlessngx/paperless-ngx:latest
 ContainerName=paperless-webserver
 HostName=webserver
-#AutoUpdate=registry
 Timezone=Europe/Berlin
-#EnvironmentFile=./docker-compose.env
-Environment=HOME=/root
 Environment=HOSTNAME=webserver
+# Diese Einstellungen sind für SMB wichtig
+User=1002
+Group=1002
+GroupAdd=keep-groups
 Environment=LANG=C.UTF-8
 Environment=PAPERLESS_DBENGINE=mariadb
 Environment=PAPERLESS_DBHOST=10.89.2.3
@@ -238,12 +239,18 @@ NetworkAlias=webserver
 IP=10.89.2.10
 PublishPort=8090:8000/tcp
 
-Volume=/var/home/paperless/paperless-data/data:/usr/src/paperless/data:Z,U
-Volume=/var/home/paperless/paperless-data/media:/usr/src/paperless/media:Z,U
-Volume=/var/home/paperless/paperless-data/export:/usr/src/paperless/export:Z,U
-Volume=/var/home/paperless/paperless-data/consume:/usr/src/paperless/consume:Z,U
+Volume=/var/home/paperless/data/data:/usr/src/paperless/data:Z,U
+Volume=/var/home/paperless/data/media:/usr/src/paperless/media:Z,U
+Volume=/var/home/paperless/data/export:/usr/src/paperless/export:Z,U
+Volume=/var/home/paperless/data/consume:/usr/src/paperless/consume:Z,U
+# Wenn man eine UID/GID angibt, funktioniert das S6-Overlay nicht mehr
+# Daher muss man hier ein virtuelles Volume zuweisen, damit S6 funktioniert
+Volume=run.volume:/run:Z,U
 
-UserNS=auto
+
+#UserNS=auto  -- dies ist falsch für SMB
+# Diese Einstellung wird benötigt, damit der SMB Folder Schreibrechte behält
+UserNS=keep-id:uid=1002,gid=1002
 NoNewPrivileges=true
 #ReadOnly=true
 
@@ -307,3 +314,41 @@ Die wichtigsten Befehle zur Fehleranalyse und zum Starten sind:
 
 `podman network ls` # Listet die podman Netzwerke auf, die Parameter `rm` oder `prune` sind auch sehr wichtig
 
+### Zugriff auf den consume-Folder per SMB
+
+Um Zugriff auf das SMB-Share zu gewähren, muss unter SELinux ein Kontext hinzugefügt werden.
+
+```sh
+sudo semanage fcontext --add --type "samba_share_t" /var/home/paperless/data
+sudo restorecon -R /var/home/paperless/data
+```
+
+Und in der SMB-Konfiguration `/etc/samba/smb.conf` muss der Share deklariert sein.
+
+```sh
+[paperless_share]
+        comment = Paperless Datenverzeichnis
+        path = /var/home/paperless/data
+        writeable = yes
+        browseable = yes
+        public = yes
+        create mask = 0644
+        directory mask = 0755
+        write list = user
+```
+
+Dann muss der Paperless-User für SMB berechtigt und der Service aktiviert und gestartet werden.
+
+```sh
+sudo smbpasswd -a paperless
+sudo systemctl enable --now smb.service
+sudo systemctl status smb.service
+```
+
+### Disclaimer
+
+Auch, wenn ich die Informationen sorffältig zusammengetragen und bei mir verwende, kann ich keine Garantie übernehmen, dass es bei Dir 1:1 auch so funktioniert. Dazu sind die Systeme alle zu unterschiedlich und viele Dinge hängen von der individuellen Konfiguration ab.
+Aber vielleicht findest Du trotzdem Hinweise auf weitere Recherchen oder bekommst Ideen, was man manchen muss, damit es letztendlich funktioniert.
+
+Viel Vergnügen
+Oliver
